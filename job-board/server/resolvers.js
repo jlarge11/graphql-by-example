@@ -1,13 +1,15 @@
-import { getJobs } from './db/jobs.js';
+import { getJobs, getJob } from './db/jobs.js';
 import { getCompany } from './db/companies.js';
 
 export const resolvers = {
     Query: {
+        company: (_root, { id }) => getCompany(id), 
+        job: (_root, { id }) => getJob(id), 
         jobs: () => getJobs(),
     },
 
     Job: {
-        dateCreated: (job) => toIsoDate(job.createdAt),
+        date: (job) => toIsoDate(job.createdAt),
         company: (job) => getCompany(job.companyId),
     },
 }
