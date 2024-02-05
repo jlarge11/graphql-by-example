@@ -1,10 +1,27 @@
+import { GraphQLError } from 'graphql';
 import { getJobs, getJob, getJobsByCompany } from './db/jobs.js';
 import { getCompany } from './db/companies.js';
 
 export const resolvers = {
     Query: {
-        company: (_root, { id }) => getCompany(id),
-        job: (_root, { id }) => getJob(id), 
+        company: async (_root, { id }) => {
+            const company = await getCompany(id);
+
+            if (!company) {
+                handleNotFound('Company', id);
+            }
+
+            return company;
+        },
+        job: async (_root, { id }) => {
+            const job = await getJob(id)
+
+            if (!job) {
+                handleNotFound('Job', id);
+            }
+
+            return job;
+        }, 
         jobs: () => getJobs(),
     },
 
@@ -20,4 +37,10 @@ export const resolvers = {
 
 function toIsoDate(dateTime) {
     return dateTime.slice(0, 'yyyy-mm-dd'.length);
+}
+
+function handleNotFound(resourceName, resourceId) {
+    throw new GraphQLError(`No ${resourceName} found with ID ${resourceId}.`, {
+        extensions: { code: 'NOT_FOUND' }
+    });
 }
