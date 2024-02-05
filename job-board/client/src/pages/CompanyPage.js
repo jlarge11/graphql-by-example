@@ -16,18 +16,20 @@ function CompanyPage() {
     return <div>Loading...</div>
   }
 
+  const { name, description, jobs } = company;
+
   return (
     <div>
       <h1 className="title">
-        {company.name}
+        {name}
       </h1>
       <div className="box">
-        {company.description}
+        {description}
       </div>
       <h2 className="title-is5">
-        Jobs at {company.name}
+        Jobs at {name}
       </h2>
-      <JobList jobs={ company.jobs } />
+      <JobList jobs={ jobs } />
     </div>
   );
 }
