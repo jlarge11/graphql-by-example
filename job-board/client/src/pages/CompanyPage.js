@@ -13,23 +13,20 @@ function CompanyPage() {
   });
 
   useEffect(() => {
-    (async () => {
-      try {
-        const company = await getCompany(companyId);
-
+    getCompany(companyId)
+      .then((company) => {
         setState({
           company,
           loading: false,
           error: false,
         });
-      } catch {
+      }).catch(() => {
         setState({
           company: null,
           loading: false,
           error: true,
         });
-      }
-    })();
+      });
   }, [ companyId ]);
 
   const { company, loading, error } = state;
