@@ -36,7 +36,7 @@ function CompanyPage() {
   }
 
   if (error) {
-    return <div> Data unavailable</div>
+    return <div class="has-text-danger"> Data unavailable</div>
   }
 
   const { name, description, jobs } = company;
