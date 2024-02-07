@@ -35,8 +35,18 @@ export const resolvers = {
             return createJob({ companyId, title, description });
         },
 
-        updateJob: (_root, { input: { id, title, description } }) => {
-            return updateJob({ id, title, description });
+        updateJob: async (_root, { input: { id, title, description } }) => {
+            if (!user) {
+                handleUnauthenticated();
+            }
+
+            const job = await updateJob({ id, title, description, companyId });
+
+            if (!job) {
+                handleNotFound('Job', id);
+            }
+
+            return job;
         },
 
         deleteJob: async (_root, { id }, { user }) => {
