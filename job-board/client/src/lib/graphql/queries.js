@@ -1,7 +1,19 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { getAccessToken } from '../auth';
 
-const client = new GraphQLClient('http://localhost:9000/graphql');
+const client = new GraphQLClient('http://localhost:9000/graphql', {
+  headers: () => {
+    const accessToken = getAccessToken();
+
+    console.log('accessToken:', accessToken);
+
+    if (accessToken) {
+      return { 'Authorization': `Bearer ${accessToken}` };
+    }
+
+    return { };
+  },
+});
 
 export async function getJob(id) {
   const query  = gql`
@@ -51,12 +63,8 @@ export async function createJob({ title, description }) {
       }
     }
   `
-  const accessToken = getAccessToken();
 
-  const { job } = await client.request(mutation,
-    { input: { title, description } },
-    { 'Authorization': `Bearer ${accessToken}`}
-  );
+  const { job } = await client.request(mutation, { input: { title, description } });
 
   return job;
 }
