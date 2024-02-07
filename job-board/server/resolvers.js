@@ -26,9 +26,12 @@ export const resolvers = {
     },
 
     Mutation: {
-        createJob: (_root, { input: { title, description } }) => {
-            const companyId = 'FjcJCHJALA4i';
+        createJob: (_root, { input: { title, description } }, { user }) => {
+            if (!user) {
+                handleUnauthenticated();
+            }
 
+            const { companyId } = user;
             return createJob({ companyId, title, description });
         },
 
@@ -58,5 +61,11 @@ function toIsoDate(dateTime) {
 function handleNotFound(resourceName, resourceId) {
     throw new GraphQLError(`No ${resourceName} found with ID ${resourceId}.`, {
         extensions: { code: 'NOT_FOUND' }
+    });
+}
+
+function handleUnauthenticated() {
+    throw new GraphQLError(`Unauthenticated`, {
+        extensions: { code: 'UNAUTHENTICATED' }
     });
 }
