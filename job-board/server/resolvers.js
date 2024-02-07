@@ -39,8 +39,18 @@ export const resolvers = {
             return updateJob({ id, title, description });
         },
 
-        deleteJob: (_root, { id }) => {
-            return deleteJob(id);
+        deleteJob: async (_root, { id }, { user }) => {
+            if (!user) {
+                handleUnauthenticated();
+            }
+
+            const job = await deleteJob(id, user.companyId);
+
+            if (!job) {
+                handleNotFound('Job', id);
+            }
+
+            return job;
         },
     },
 
