@@ -20,9 +20,8 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const jobByIdQuery  = gql`
-  query Job ($id: ID!) {
-    job(id: $id) {
+const jobDetailFragment = gql`
+  fragment JobDetail on Job {
       id
       title
       date
@@ -32,8 +31,16 @@ const jobByIdQuery  = gql`
         id
         name
       }
+  }
+`;
+
+const jobByIdQuery  = gql`
+  query Job ($id: ID!) {
+    job(id: $id) {
+      ...JobDetail
     }
   }
+  ${jobDetailFragment}
 `;
 
 export async function getJob(id) {
@@ -74,16 +81,10 @@ export async function createJob({ title, description }) {
   const mutation  = gql`
     mutation CreateJob($input: CreateJobInput!) {
       job: createJob(input: $input) {
-        id
-        date
-        title
-        company {
-          id
-          name
-        }
-        description
+        ...JobDetail
       }
     }
+    ${jobDetailFragment}
   `;
 
   const { data } = await apolloClient.mutate({
