@@ -1,14 +1,10 @@
-import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router';
 import JobList from '../components/JobList';
-import { companyByIdQuery } from '../lib/graphql/queries';
+import { useCompany } from '../lib/graphql/hooks';
 
 function CompanyPage() {
   const { companyId } = useParams();
-
-  const { data, loading, error } = useQuery(companyByIdQuery, {
-    variables: { id: companyId },
-  });
+  const { company, loading, error } = useCompany(companyId);
 
   if (loading) {
     return <div>Loading...</div>
@@ -18,7 +14,6 @@ function CompanyPage() {
     return <div class="has-text-danger"> Data unavailable</div>
   }
 
-  const { company } = data;
   const { name, description, jobs } = company;
 
   return (
