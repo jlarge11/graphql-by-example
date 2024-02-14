@@ -2,7 +2,15 @@ import JobList from '../components/JobList';
 import { useJobs } from '../lib/graphql/hooks';
 
 function HomePage() {
-  const { jobs } = useJobs();
+  const { jobs, loading, error } = useJobs();
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div class="has-text-danger">Data unavailable</div>
+  }
 
   return (
     <div>

@@ -74,24 +74,6 @@ export const companyByIdQuery = gql`
   }
 `;
 
-export async function getJob(id) {
-  const { data } = await apolloClient.query({
-    query: jobByIdQuery,
-    variables: { id },
-  });
-
-  return data.job;
-}
-
-export async function getJobs() {
-  const { data } = await apolloClient.query({
-    query: jobsQuery,
-    fetchPolicy: 'network-only',
-  });
-
-  return data.jobs;
-}
-
 export async function createJob({ title, description }) {
   const mutation  = gql`
     mutation CreateJob($input: CreateJobInput!) {
