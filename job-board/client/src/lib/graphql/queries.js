@@ -35,8 +35,8 @@ const jobDetailFragment = gql`
 `;
 
 export const jobsQuery = gql`
-  query Jobs {
-    jobs {
+  query Jobs($limit: Int, $offset: Int) {
+    jobs(limit: $limit, offset: $offset) {
       id
       title
       date
@@ -50,7 +50,7 @@ export const jobsQuery = gql`
 `;
     
 export const jobByIdQuery  = gql`
-  query Job ($id: ID!) {
+  query Job($id: ID!) {
     job(id: $id) {
       ...JobDetail
     }
