@@ -22,7 +22,7 @@ export const resolvers = {
 
             return job;
         }, 
-        jobs: () => getJobs(),
+        jobs: (_root, { limit, offset }) => getJobs(limit, offset),
     },
 
     Mutation: {
