@@ -13,8 +13,10 @@ function HomePage() {
   }
 
   if (error) {
-    return <div class="has-text-danger">Data unavailable</div>
+    return <div className="has-text-danger">Data unavailable</div>
   }
+
+  const totalPages = Math.ceil(jobs.totalCount / JOBS_PER_PAGE);
 
   return (
     <div>
@@ -23,10 +25,10 @@ function HomePage() {
       </h1>
       <div>
         <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
-        <span> {currentPage} </span>
-        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        <span> {currentPage} of {totalPages} </span>
+        <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
       </div>
-      <JobList jobs={ jobs } />
+      <JobList jobs={ jobs.items } />
     </div>
   );
 }
