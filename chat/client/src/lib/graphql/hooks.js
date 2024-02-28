@@ -7,7 +7,17 @@ export function useAddMessage() {
   const addMessage = async (text) => {
     const { data: { message } } = await mutate({
       variables: { text },
+      update: (cache, { data}) => {
+        const newMessage = data.message;
+
+        cache.updateQuery({ query: messagesQuery }, ({ currentMessages }) => {
+          return {
+            messages: [...currentMessages, newMessage],
+          };
+        });
+      }
     });
+
     return message;
   };
 
